@@ -21,7 +21,7 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
-
+    implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 
 test {
