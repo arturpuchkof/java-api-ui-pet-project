@@ -1,4 +1,10 @@
 package models;
 
-public class AddUserResponse {
-}
+import lombok.Data;
+
+    @Data
+    public class AddUserResponse {
+        private int code;
+        private String type;
+        private String message;
+    }

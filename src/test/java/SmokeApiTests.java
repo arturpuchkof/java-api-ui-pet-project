@@ -1,68 +1,97 @@
+import controllers.UserController;
 import io.restassured.response.Response;
+import models.AddUserResponse;
+import models.GetUserResponse;
+import models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-
 public class SmokeApiTests {
-    String baseUrl = "https://petstore.swagger.io/v2/";
-    @Test
-    void simpleTest(){
-        String body = """
-           {
-             "id": 0,
-             "username": "string",
-             "firstName": "string",
-             "lastName": "string",
-             "email": "string",
-             "password": "string",
-             "phone": "string",
-             "userStatus": 0
-           }""";
+    UserController userController = new UserController();
 
-        Response response = given()
-                .baseUri(baseUrl)
-                .header("accept", "application/json")
-                .header("Content-Type", "application/json")
-                .body(body).
-                when().post("user").andReturn();
-        response.body().prettyPrint();
+    @Test
+    void createUserControllerTest() {
+        User userBuilder = User.builder()
+                .username("username")
+                .firstName("firstName")
+                .lastName("lastName")
+                .email("email")
+                .phone("password")
+                .userStatus(0)
+                .build();
+
+        Response response = userController.createUser(userBuilder);
+        AddUserResponse createdUserResponse = response.as(AddUserResponse.class);
 
 
         Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals(200, createdUserResponse.getCode());
+        Assertions.assertEquals("unknown", createdUserResponse.getType());
+        Assertions.assertFalse(createdUserResponse.getMessage().isEmpty());
     }
 
     @Test
-    void checkUserResponseBody() {
+    void updateUserControllerTest(){
+       User userBuilder = User.builder()
+                .username("username")
+                .firstName("firstName")
+                .lastName("lastName")
+                .email("email")
+                .phone("password")
+                .userStatus(0)
+                .build();
 
-        String body = """
-           {
-             "id": 0,
-             "username": "string",
-             "firstName": "string",
-             "lastName": "string",
-             "email": "string",
-             "password": "string",
-             "phone": "string",
-             "userStatus": 0
-           }""";
+        userController.createUser(userBuilder);
+        Response response = userController.updateUser(userBuilder);
+        AddUserResponse updateUserResponse = response.as(AddUserResponse.class);
 
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals(200, updateUserResponse.getCode());
+        Assertions.assertEquals("unknown", updateUserResponse.getType());
+        Assertions.assertFalse(updateUserResponse.getMessage().isEmpty());
+    }
 
-        given()
-                .baseUri(baseUrl)
-                .header("accept", "application/json")
-                .header("Content-Type", "application/json")
-                .body(body).
-                when()
-                .post("user")
-                .then()
-                .statusCode(200)
-                .body("code", equalTo(200))
-                .body("type", equalTo("unknown"))
-                .body("message", notNullValue(String.class));
+    @Test
+    void deleteUserControllerTest(){
+        User userBuilder = User.builder()
+                .username("username")
+                .firstName("firstName")
+                .lastName("lastName")
+                .email("email")
+                .phone("password")
+                .userStatus(0)
+                .build();
+
+        userController.createUser(userBuilder);
+        String userName = userBuilder.getUsername();
+        Response response = userController.deleteUser(userName);
+        AddUserResponse deleteUserResponse = response.as(AddUserResponse.class);
+
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("unknown", deleteUserResponse.getType());
+        Assertions.assertEquals(userName, deleteUserResponse.getMessage());
+
+    }
+
+    @Test
+    void getUserByNameController(){
+        User userBuilder = User.builder()
+                .username("username")
+                .firstName("firstName")
+                .lastName("lastName")
+                .email("email")
+                .phone("password")
+                .userStatus(0)
+                .build();
+
+        userController.createUser(userBuilder);
+        String userName = userBuilder.getUsername();
+
+        Response response = userController.getUserByUserName(userName);
+        GetUserResponse getByUserNameResponse = response.as(GetUserResponse.class);
+
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals(userName, getByUserNameResponse.getUsername());
     }
 
 }
