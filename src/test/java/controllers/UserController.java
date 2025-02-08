@@ -1,5 +1,6 @@
 package controllers;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.User;
@@ -15,7 +16,8 @@ public class UserController {
         this.requestSpecification = given()
                 .accept(JSON)
                 .contentType(JSON)
-                .baseUri(BASE_URI);
+                .baseUri(BASE_URI)
+                .filter(new AllureRestAssured());
     }
 
     public Response createUser(User user){

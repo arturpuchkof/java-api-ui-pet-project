@@ -1,8 +1,10 @@
 import controllers.UserController;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import models.AddUserResponse;
 import models.GetUserResponse;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static testData.TestData.DEFAULT_USER;
@@ -11,6 +13,8 @@ import static testData.TestData.INVALID_USER;
 public class SmokeApiTests {
     UserController userController = new UserController();
 
+    @Story("API test")
+    @Tag("api")
     @Test
     void createUserControllerTest() {
         Response response = userController.createUser(DEFAULT_USER);
