@@ -27,6 +27,7 @@ public class SmokeApiTests {
         Assertions.assertFalse(createdUserResponse.getMessage().isEmpty());
     }
 
+    @Tag("api")
     @Test
     void updateUserControllerTest(){
         userController.createUser(DEFAULT_USER);
@@ -39,6 +40,7 @@ public class SmokeApiTests {
         Assertions.assertFalse(updateUserResponse.getMessage().isEmpty());
     }
 
+    @Tag("api")
     @Test
     void deleteUserControllerTest(){
         userController.createUser(DEFAULT_USER);
@@ -52,6 +54,7 @@ public class SmokeApiTests {
 
     }
 
+    @Tag("api")
     @Test
     void getUserByNameController(){
         userController.createUser(DEFAULT_USER);
@@ -64,6 +67,7 @@ public class SmokeApiTests {
         Assertions.assertEquals(userName, getByUserNameResponse.getUsername());
     }
 
+    @Tag("api")
     @Test
     void createInvalidUser(){
         Response response = userController.createUser(INVALID_USER);
